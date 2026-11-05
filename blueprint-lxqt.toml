@@ -1,0 +1,10 @@
+name = "strontium-lxqt"
+description = "Strontium Linux core distro"
+version = "0.0.1"
+distro = "fedora-44"
+
+[[groups]]
+name = "lxqt-desktop-environment"
+
+[customizations]
+hostname="strontium-core"

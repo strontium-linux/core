@@ -1,0 +1,31 @@
+name = "strontium-minimal"
+description = "Strontium Linux core distro"
+version = "0.0.1"
+distro = "fedora-44"
+
+[customizations]
+hostname="strontium-core"
+
+[[customizations.files]]
+path="/etc/os-release"
+mode="0644"
+user="root"
+group="root"
+data="""
+NAME="Strontium Linux"
+VERSION="1 (One)"
+RELEASE_TYPE=stable
+ID=strontium
+VERSION_ID=1
+PRETTY_NAME="Strontium Linux 1 (One)"
+ANSI_COLOR="0;38;2;212;0;0"
+LOGO=fedora-logo-icon
+CPE_NAME="cpe:/o:ingstudios:strontium_linux:1"
+ID_LIKE=fedora
+DEFAULT_HOSTNAME="strontium"
+HOME_URL="https://strontium.ingstudios.dev"
+DOCUMENTATION_URL="https://strontium.ingstudios.dev/docs"
+SUPPORT_URL="https://github.com/strontium-linux/core/issues"
+BUG_REPORT_URL="https://github.com/strontium-linux/core/issues"
+SUPPORT_END=2027-05-19
+"""

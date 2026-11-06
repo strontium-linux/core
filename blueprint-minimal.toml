@@ -4,14 +4,14 @@ version = "0.0.1"
 distro = "fedora-44"
 
 [customizations]
-hostname="strontium-core"
+hostname = "strontium"
 
 [[customizations.files]]
-path="/etc/os-release"
-mode="0644"
-user="root"
-group="root"
-data="""
+path = "/etc/os-release"
+mode = "0644"
+user = "root"
+group = "root"
+data = """
 NAME="Strontium Linux"
 VERSION="1 (One)"
 RELEASE_TYPE=stable

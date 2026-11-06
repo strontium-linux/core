@@ -1,0 +1,56 @@
+name = "strontium-home"
+description = "Strontium Linux core distro with Strontianite shell"
+version = "0.0.1"
+distro = "fedora-44"
+
+[customizations]
+hostname="strontium"
+
+[[customizations.files]]
+path = "/etc/os-release"
+mode = "0644"
+user = "root"
+group = "root"
+data = """
+NAME="Strontium Linux"
+VERSION="1 (One)"
+RELEASE_TYPE=stable
+ID=strontium
+VERSION_ID=1
+PRETTY_NAME="Strontium Linux 1 (One)"
+ANSI_COLOR="0;38;2;212;0;0"
+LOGO=fedora-logo-icon
+CPE_NAME="cpe:/o:ingstudios:strontium_linux:1"
+ID_LIKE=fedora
+DEFAULT_HOSTNAME="strontium"
+HOME_URL="https://strontium.ingstudios.dev"
+DOCUMENTATION_URL="https://strontium.ingstudios.dev/docs"
+SUPPORT_URL="https://github.com/strontium-linux/core/issues"
+BUG_REPORT_URL="https://github.com/strontium-linux/core/issues"
+SUPPORT_END=2027-05-19
+"""
+
+[[customizations.directories]]
+path = "/usr/local/bin"
+mode = "0755"
+user = "root"
+group = "root"
+ensure_parents = true
+
+[[customizations.files]]
+path = "/usr/local/bin/extract-strontianite.sh"
+mode = "0644"
+user = "root"
+group = "root"
+data = """
+set -e
+
+INSTALL_DIR="/opt/strontianite"
+mkdir -p "$INSTALL_DIR"
+
+curl -L "https://github.com/strontium-linux/strontianite/releases/download/v0.2.0/strontianite-linux-x64.tar.gz" -o /tmp/strontianite-release.tar.gz
+
+tar -xvzf /tmp/strontianite-release.tar.gz -C "$INSTALL_DIR"
+
+rm -rf /tmp/strontianite-release.tar.gz
+"""

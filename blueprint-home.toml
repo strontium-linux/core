@@ -1,7 +1,43 @@
 name = "strontium-home"
 description = "Strontium Linux core distro with Strontianite shell"
-version = "0.0.1"
-distro = "fedora-44"
+version = "1.0.0"
+distro = "fedora-45"
+
+[[packages]]
+name = "curl"
+version = "*"
+
+[[packages]]
+name = "tar"
+version = "*"
+
+[[packages]]
+name = "labwc"
+version = "*"
+
+[[packages]]
+name = "playerctl"
+version = "*"
+
+[[packages]]
+name = "xorg-x11-server-Xwayland"
+version = "*"
+
+[[packages]]
+name = "mpv-libs"
+version = "*"
+
+[[packages]]
+name = "mpv-devel"
+version = "*"
+
+[[packages]]
+name = "xdg-desktop-portal"
+version = "*"
+
+[[packages]]
+name = "xdg-desktop-portal-gtk"
+version = "*"
 
 [customizations]
 hostname="strontium"
@@ -27,30 +63,125 @@ HOME_URL="https://strontium.ingstudios.dev"
 DOCUMENTATION_URL="https://strontium.ingstudios.dev/docs"
 SUPPORT_URL="https://github.com/strontium-linux/core/issues"
 BUG_REPORT_URL="https://github.com/strontium-linux/core/issues"
-SUPPORT_END=2027-05-19
+SUPPORT_END=2027-12-08
+"""
+
+[[customizations.files]]
+path = "/usr/local/bin/extract-strontianite.sh"
+mode = "0755"
+user = "root"
+group = "root"
+data = """
+#!/bin/bash
+
+set -e
+
+INSTALL_DIR="/opt/strontianite"
+STRONTIANITE_BINARY="$INSTALL_DIR/bundle/strontianite"
+
+if [ -f "$STRONTIANITE_BINARY" ]; then
+	exit 0
+fi
+
+mkdir -p "$INSTALL_DIR"
+
+curl -L "https://github.com/strontium-linux/strontianite/releases/download/v0.3.0/strontianite-linux-x64.tar.gz" -o /tmp/strontianite-release.tar.gz
+
+tar -xvzf /tmp/strontianite-release.tar.gz -C "$INSTALL_DIR"
+
+chmod +x "$INSTALL_DIR/bundle/strontianite"
+
+rm -rf /tmp/strontianite-release.tar.gz
+"""
+
+[[customizations.files]]
+path = "/etc/systemd/system/extract-strontianite.service"
+mode = "0644"
+user = "root"
+group = "root"
+data = """
+[Unit]
+Description=Extract Strontianite shell
+DefaultDependencies=no
+After=local-fs.target network-online.target
+Wants=network-online.target
+Before=strontianite-labwc.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/extract-strontianite.sh
+
+[Install]
+WantedBy=multi-user.target
 """
 
 [[customizations.directories]]
-path = "/usr/local/bin"
+path = "/etc/xdg/labwc"
 mode = "0755"
 user = "root"
 group = "root"
 ensure_parents = true
 
 [[customizations.files]]
-path = "/usr/local/bin/extract-strontianite.sh"
+path = "/etc/xdg/labwc/autostart"
 mode = "0644"
 user = "root"
 group = "root"
 data = """
-set -e
+#!/bin/bash
 
-INSTALL_DIR="/opt/strontianite"
-mkdir -p "$INSTALL_DIR"
-
-curl -L "https://github.com/strontium-linux/strontianite/releases/download/v0.2.0/strontianite-linux-x64.tar.gz" -o /tmp/strontianite-release.tar.gz
-
-tar -xvzf /tmp/strontianite-release.tar.gz -C "$INSTALL_DIR"
-
-rm -rf /tmp/strontianite-release.tar.gz
+/opt/strontianite/bundle/strontianite &
 """
+
+[[customizations.files]]
+path = "/etc/xdg/labwc/environment"
+mode = "0644"
+user = "root"
+group = "root"
+data = """
+XCURSOR_THEME=breeze_cursors
+XCUROSR_SIZE=24
+"""
+
+[[customizations.files]]
+path = "/etc/systemd/system/strontianite-labwc.service"
+mode = "0644"
+user = "root"
+group = "root"
+data = """
+[Unit]
+Description=Start Strontianite shell
+After=network.target local-fs.target extract-strontianite.service
+Requires=extract-strontianite.service
+Conflicts=getty@tty1.service
+After=getty@tty1.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/dbus-run-session /usr/bin/labwc
+StandardInput=tty
+StandardOutput=journal
+StandardError=journal
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+Restart=always
+RestartSec=2s
+User=strontium
+UtmpIdentifier=tty1
+PAMName=login
+
+[Install]
+WantedBy=multi-user.target
+"""
+
+[[customizations.user]]
+name = "strontium"
+
+[customizations.services]
+enabled = [
+	"extract-strontianite",
+	"strontianite-labwc.service"
+]

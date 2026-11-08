@@ -1,7 +1,7 @@
 name = "strontium-minimal"
 description = "Strontium Linux core distro"
-version = "0.0.1"
-distro = "fedora-44"
+version = "1.0.0"
+distro = "fedora-45"
 
 [customizations]
 hostname = "strontium"
@@ -27,5 +27,5 @@ HOME_URL="https://strontium.ingstudios.dev"
 DOCUMENTATION_URL="https://strontium.ingstudios.dev/docs"
 SUPPORT_URL="https://github.com/strontium-linux/core/issues"
 BUG_REPORT_URL="https://github.com/strontium-linux/core/issues"
-SUPPORT_END=2027-05-19
+SUPPORT_END=2027-12-08
 """

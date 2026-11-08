@@ -47,7 +47,7 @@ composer-cli blueprints push blueprint-[version].toml # e.g. composer-cli bluepr
 2. Build the image
 
 ```bash
-composer-cli compose start [blueprint-name] image-builder # e.g. composer-cli compose start blueprint-minimal.toml image-builder
+composer-cli compose start [blueprint-name] image-installer # e.g. composer-cli compose start strontium-minimal image-installer
 ```
 
 3. Retrieve the ISO

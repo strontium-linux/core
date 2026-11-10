@@ -28,15 +28,51 @@ name = "mpv-libs"
 version = "*"
 
 [[packages]]
-name = "mpv-devel"
-version = "*"
-
-[[packages]]
 name = "xdg-desktop-portal"
 version = "*"
 
 [[packages]]
 name = "xdg-desktop-portal-gtk"
+version = "*"
+
+[[packages]]
+name = "breeze-cursor-theme"
+version = "*"
+
+[[packages]]
+name = "foot"
+version = "*"
+
+[[packages]]
+name = "epiphany"
+version = "*"
+
+[[packages]]
+name = "flatpak"
+version = "*"
+
+[[packages]]
+name = "mate-polkit"
+version = "*"
+
+[[packages]]
+name = "dejavu-sans-mono-fonts"
+version = "*"
+
+[[packages]]
+name = "papirus-icon-theme"
+version = "*"
+
+[[packages]]
+name = "glycin-loaders"
+version = "*"
+
+[[packages]]
+name = "bubblewrap"
+version = "*"
+
+[[packages]]
+name = "upower"
 version = "*"
 
 [customizations]
@@ -85,7 +121,7 @@ fi
 
 mkdir -p "$INSTALL_DIR"
 
-curl -L "https://github.com/strontium-linux/strontianite/releases/download/v0.3.0/strontianite-linux-x64.tar.gz" -o /tmp/strontianite-release.tar.gz
+curl -fL --retry 5 "https://github.com/strontium-linux/strontianite/releases/download/v0.3.0/strontianite-linux-x64.tar.gz" -o /tmp/strontianite-release.tar.gz
 
 tar -xvzf /tmp/strontianite-release.tar.gz -C "$INSTALL_DIR"
 
@@ -131,6 +167,7 @@ group = "root"
 data = """
 #!/bin/bash
 
+/usr/libexec/polkit-mate-authentication-agent-1 &
 /opt/strontianite/bundle/strontianite &
 """
 
@@ -140,8 +177,8 @@ mode = "0644"
 user = "root"
 group = "root"
 data = """
-XCURSOR_THEME=breeze_cursors
-XCUROSR_SIZE=24
+XCURSOR_THEME=Breeze_Light
+XCURSOR_SIZE=24
 """
 
 [[customizations.files]]
@@ -152,36 +189,60 @@ group = "root"
 data = """
 [Unit]
 Description=Start Strontianite shell
-After=network.target local-fs.target extract-strontianite.service
+After=local-fs.target extract-strontianite.service systemd-user-sessions.service systemd-logind.service plymouth-quit-wait.service
 Requires=extract-strontianite.service
-Conflicts=getty@tty1.service
-After=getty@tty1.service
+Conflicts=getty@tty1.service kmsconvt@tty1.service
+After=getty@tty1.service kmsconvt@tty1.service
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-User=root
-ExecStart=/usr/bin/dbus-run-session /usr/bin/labwc
-StandardInput=tty
+User=strontium
+PAMName=login
+ExecStart=/usr/bin/setpriv --inh-caps=-wake_alarm --ambient-caps=-wake_alarm /usr/bin/labwc
+StandardInput=tty-fail
 StandardOutput=journal
 StandardError=journal
 TTYPath=/dev/tty1
 TTYReset=yes
 TTYVHangup=yes
+TTYVTDisallocate=yes
+UtmpIdentifier=tty1
+UtmpMode=user
 Restart=always
 RestartSec=2s
-User=strontium
-UtmpIdentifier=tty1
-PAMName=login
 
 [Install]
 WantedBy=multi-user.target
 """
 
+[[customizations.files]]
+path = "/etc/xdg/labwc/rc.xml"
+mode = "0644"
+user = "root"
+group = "root"
+data = """
+<?xml version="1.0"?>
+<labwc_config>
+  <windowRules>
+    <windowRule identifier="dev.ingstudios.strontianite">
+      <serverDecoration>no</serverDecoration>
+      <action name="ToggleFullscreen"/>
+    </windowRule>
+  </windowRules>
+</labwc_config>
+"""
+
 [[customizations.user]]
 name = "strontium"
+password = "strontium"
+groups = ["wheel", "users", "video", "render", "audio", "input"]
 
 [customizations.services]
 enabled = [
 	"extract-strontianite",
 	"strontianite-labwc.service"
+]
+masked = [
+	"kmsconvt@tty1.service"
 ]

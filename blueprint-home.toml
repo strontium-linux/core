@@ -75,6 +75,10 @@ version = "*"
 name = "upower"
 version = "*"
 
+[[packages]]
+name = "wlrctl"
+version = "*"
+
 [customizations]
 hostname="strontium"
 
@@ -121,7 +125,7 @@ fi
 
 mkdir -p "$INSTALL_DIR"
 
-curl -fL --retry 5 "https://github.com/strontium-linux/strontianite/releases/download/v0.3.0/strontianite-linux-x64.tar.gz" -o /tmp/strontianite-release.tar.gz
+curl -fL --retry 5 "https://github.com/strontium-linux/strontianite/releases/download/v1.0.2/strontianite-linux-x64.tar.gz" -o /tmp/strontianite-release.tar.gz
 
 tar -xvzf /tmp/strontianite-release.tar.gz -C "$INSTALL_DIR"
 

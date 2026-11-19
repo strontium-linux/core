@@ -1,6 +1,6 @@
 name = "strontium-home"
 description = "Strontium Linux core distro with Strontianite shell"
-version = "1.0.0"
+version = "1.0.1"
 distro = "fedora-45"
 
 [[packages]]

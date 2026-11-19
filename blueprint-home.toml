@@ -193,10 +193,9 @@ group = "root"
 data = """
 [Unit]
 Description=Start Strontianite shell
-After=local-fs.target extract-strontianite.service systemd-user-sessions.service systemd-logind.service plymouth-quit-wait.service
+After=local-fs.target extract-strontianite.service systemd-user-sessions.service systemd-logind.service plymouth-quit-wait.service getty@tty1.service kmsconvt@tty1.service
 Requires=extract-strontianite.service
 Conflicts=getty@tty1.service kmsconvt@tty1.service
-After=getty@tty1.service kmsconvt@tty1.service
 StartLimitIntervalSec=0
 
 [Service]
@@ -215,6 +214,25 @@ UtmpIdentifier=tty1
 UtmpMode=user
 Restart=always
 RestartSec=2s
+
+[Install]
+WantedBy=multi-user.target
+"""
+
+[[customizations.files]]
+path = "/etc/systemd/system/add-flathub.service"
+mode = "0644"
+user = "root"
+group = "root"
+data = """
+[Unit]
+Description=Add Flathub repo
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 [Install]
 WantedBy=multi-user.target
@@ -245,7 +263,8 @@ groups = ["wheel", "users", "video", "render", "audio", "input"]
 [customizations.services]
 enabled = [
 	"extract-strontianite",
-	"strontianite-labwc.service"
+	"strontianite-labwc.service",
+	"add-flathub.service"
 ]
 masked = [
 	"kmsconvt@tty1.service"

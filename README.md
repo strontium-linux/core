@@ -1,10 +1,10 @@
 # Strontium Linux Core
 
-Get started with Strontium Linux. This repository contains the resources to build your own Strontium Linux ISO. It contains the minimal and LXQt versions of Strontium Linux.
+Get started with Strontium Linux. This repository contains the resources to build your own Strontium Linux ISO. It contains the minimal, LXQt, and home versions of Strontium Linux.
 
 ## Distro Versions
 
-There are currently 2 variants of Strontium Linux.
+There are currently 3 variants of Strontium Linux.
 
 ### 1. Strontium Linux Minimal
 

@@ -18,6 +18,12 @@ Strontium Linux LXQt contains the base Fedora 44 envrionment, as well as the LXQ
 
 The blueprint can be found in `blueprint-lxqt.toml`.
 
+## Contributing
+
+Strontium Linux welcomes contributions! Before you contribute, do note that **AI generated code is completely banned** to ensure quality and consistency.
+
+Please ensure that your contributions are meaningful and do not add extra dependencies or files if it does not serve a specific purpose.
+
 ## Dependencies
 
 You need to install the dependencies for `composer-cli` before getting started. It is recommended that you use a Fedora system.
@@ -59,3 +65,9 @@ composer-cli compose image [blueprint-commit-hash] # e.g. composer-cli compose i
 4. Run the ISO
 
 You can use your preferred virtual machine like QEMU to run the live ISO or boot it from a USB stick.
+
+## License
+
+Strontium Linux is licensed under the [Apache 2.0 License](/LICENSE).
+
+© 2026 (ing) Studios, Strontium Linux contributors, and Ethan Lee
